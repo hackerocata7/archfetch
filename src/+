@@ -11,7 +11,7 @@ fn compiletext(acii: Vec<String>, details: Vec<String>) -> String {
 fn get_kern() -> String {
     let f = fs::read_to_string("/proc/version").expect("Couldnt get kernel version");
     let i = f.split(" ").collect::<Vec<&str>>();
-    format!("{} {} {}", i[0], i[1], i[2])
+    format!("{} {}", i[0], i[1])
 }
 
 fn get_info() -> Vec<String> {
@@ -26,7 +26,7 @@ fn get_info() -> Vec<String> {
     let hostname = hostname::get().expect("Failed to parse hostname.").into_string().expect("Error parseing to string hostname.");
     retv.push(hostname);
 
-    let host = fs::read_to_string("/sys/devices/virtual/dmi/id/product_family").expect("Could not read host").trim().to_string();
+    let host = fs::read_to_string("/sys/devices/virtual/dmi/id/product_family").expect("Could not read host");
     retv.push(host);
 
     let kernel = get_kern();
@@ -44,5 +44,4 @@ fn main() {
     println!("{}", v[0]);
     println!("{}", v[1]);
     println!("{}", v[2]);
-    println!("{}", v[3])
 }
