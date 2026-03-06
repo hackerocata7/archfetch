@@ -4,6 +4,7 @@ use get_shell::get_shell_name;
 use os_release::OsRelease;
 use std::ffi::OsString;
 use std::fs;
+use std::env;
 
 fn compiletext(acii: Vec<String>, details: Vec<String>) -> String {
     String::new()
@@ -36,6 +37,9 @@ fn get_info() -> Vec<String> {
     let shell = get_shell_name().expect("Could not parse shell name.");
     retv.push(shell);
 
+    let wm = env::var("XDG_CURRENT_DESKTOP").expect("Couldnt retrive WM");
+    retv.push(wm);
+
 
     retv
 
@@ -50,4 +54,5 @@ fn main() {
     println!("{}", v[2]);
     println!("{}", v[3]);
     println!("{}", v[4]);
+    println!("{}", v[5]);
 }
