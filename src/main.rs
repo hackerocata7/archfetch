@@ -1,5 +1,6 @@
 extern crate os_release;
 
+use get_shell::get_shell_name;
 use os_release::OsRelease;
 use std::ffi::OsString;
 use std::fs;
@@ -32,6 +33,9 @@ fn get_info() -> Vec<String> {
     let kernel = get_kern();
     retv.push(kernel);
 
+    let shell = get_shell_name().expect("Could not parse shell name.");
+    retv.push(shell);
+
 
     retv
 
@@ -44,5 +48,6 @@ fn main() {
     println!("{}", v[0]);
     println!("{}", v[1]);
     println!("{}", v[2]);
-    println!("{}", v[3])
+    println!("{}", v[3]);
+    println!("{}", v[4]);
 }
