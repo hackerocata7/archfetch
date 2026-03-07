@@ -11,7 +11,7 @@ use std::env;
 fn compiletext(acii: Vec<String>, details: Vec<String>) {
     let mut prtv:  Vec<String> = Vec::new();
     for i in 0..acii.len() {
-        prtv.push(format!("{} {}", acii[i], if i % 2 == 0 {details[i / 2].clone()} else {"".to_string()}));
+        prtv.push(format!("{} {}", acii[i], if i % 3 == 0 {if i / 3 >= details.len() {"".to_string()} else {details[i / 3].clone()}} else {"".to_string()}));
     }
 
     for i in prtv {
@@ -76,14 +76,14 @@ fn get_info() -> Vec<String> {
 fn main() {
     let v = get_info();
     let l = do_ascii();
-    println!("{}", v[0]);
-    println!("{}", v[1]);
-    println!("{}", v[2]);
-    println!("{}", v[3]);
-    println!("{}", v[4]);
-    println!("{}", v[5]);
-    for i in &l {
-        println!("{}", i);
-    }
+//    println!("{}", v[0]);
+//    println!("{}", v[1]);
+//    println!("{}", v[2]);
+//    println!("{}", v[3]);
+//    println!("{}", v[4]);
+//    println!("{}", v[5]);
+//    for i in &l {
+//        println!("{}", i);
+//    }
     compiletext(l, v);
 }
