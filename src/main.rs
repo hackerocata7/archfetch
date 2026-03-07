@@ -1,5 +1,7 @@
 extern crate os_release;
 
+use sysinfo::System;
+use bytesize::ByteSize;
 use get_shell::get_shell_name;
 use os_release::OsRelease;
 use std::ffi::OsString;
@@ -40,6 +42,11 @@ fn get_info() -> Vec<String> {
     let wm = env::var("XDG_CURRENT_DESKTOP").expect("Couldnt retrive WM");
     retv.push(wm);
 
+    let mut sys = System::new_all();
+    sys.refresh_all();
+    let ramgb = ByteSize::b(sys.used_memory()).as_gib().to_string()[..4].to_string();
+    let ramgbtot = ByteSize::b(sys.total_memory()).as_gib().to_string()[..4].to_string();
+    retv.push(format!("{ramgb} GB / {ramgbtot} GB"));
 
     retv
 
@@ -55,4 +62,5 @@ fn main() {
     println!("{}", v[3]);
     println!("{}", v[4]);
     println!("{}", v[5]);
+    println!("{}", v[6]);
 }
