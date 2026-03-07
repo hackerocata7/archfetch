@@ -8,8 +8,15 @@ use std::ffi::OsString;
 use std::fs;
 use std::env;
 
-fn compiletext(acii: Vec<String>, details: Vec<String>) -> String {
-    String::new()
+fn compiletext(acii: Vec<String>, details: Vec<String>) {
+    let mut prtv:  Vec<String> = Vec::new();
+    for i in 0..acii.len() {
+        prtv.push(format!("{} {}", acii[i], if i % 2 == 0 {details[i / 2].clone()} else {"".to_string()}));
+    }
+
+    for i in prtv {
+        println!("{}", i);
+    }
 }
 
 fn do_ascii() -> Vec<String> {
@@ -38,8 +45,8 @@ fn get_info() -> Vec<String> {
     let os = format!("{release} {version}");
     retv.push(os);
 
-    let hostname = hostname::get().expect("Failed to parse hostname.").into_string().expect("Error parseing to string hostname.");
-    retv.push(hostname);
+//    let hostname = hostname::get().expect("Failed to parse hostname.").into_string().expect("Error parseing to string hostname.");
+//    retv.push(hostname);
 
     let host = fs::read_to_string("/sys/devices/virtual/dmi/id/product_family").expect("Could not read host").trim().to_string();
     retv.push(host);
@@ -75,8 +82,8 @@ fn main() {
     println!("{}", v[3]);
     println!("{}", v[4]);
     println!("{}", v[5]);
-    println!("{}", v[6]);
-    for i in l {
+    for i in &l {
         println!("{}", i);
     }
+    compiletext(l, v);
 }
