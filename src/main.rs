@@ -1,16 +1,15 @@
 extern crate os_release;
 
-use sysinfo::System;
+use sysinfo::{System, Disks};
 use bytesize::ByteSize;
 use get_shell::get_shell_name;
 use os_release::OsRelease;
-use std::fs;
-use std::env;
+use std::{fs, env};
 
 fn compiletext(acii: Vec<String>, details: Vec<String>) {
     let mut prtv:  Vec<String> = Vec::new();
     for i in 0..acii.len() {
-        prtv.push(format!("{} {}", acii[i], if i % 3 == 0 {if i / 3 >= details.len() {"".to_string()} else {details[i / 3].clone()}} else {"".to_string()}));
+        prtv.push(format!("{} {}", acii[i], if i % 2 == 0 {if i / 2 >= details.len() {"".to_string()} else {details[i / 2].clone()}} else {"".to_string()}));
     }
 
     for i in prtv {
@@ -64,8 +63,19 @@ fn get_info() -> Vec<String> {
     // Ignore the double .to_string(); Very hacked thing. LOL
     let ramgb = ByteSize::b(sys.used_memory()).as_gib().to_string()[..4].to_string();
     let ramgbtot = ByteSize::b(sys.total_memory()).as_gib().to_string()[..4].to_string();
-    retv.push(format!(" {ramgb} GB / {ramgbtot} GB"));
+    retv.push(format!(" {ramgb} GiB / {ramgbtot} GiB"));
 
+        
+    let disks = Disks::new_with_refreshed_list();
+    let mut total_sp: u64 = 0;
+    let mut used_sp: u64 = 0;
+    for disk in &disks {
+        total_sp += disk.total_space();
+        used_sp += disk.total_space() - disk.available_space();
+    }
+    let totalg = ByteSize::b(total_sp).as_gib().to_string()[..5].to_string();
+    let usedg = ByteSize::b(used_sp).as_gib().to_string()[..4].to_string();
+    retv.push(format!("󱛟 {} GiB / {} GiB", usedg, totalg));
     retv
 
 
