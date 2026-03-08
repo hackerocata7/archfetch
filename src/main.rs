@@ -75,7 +75,7 @@ fn get_info() -> Vec<String> {
 
     retv.push(format!(" {} GiB / {} GiB", get_ram().0, get_ram().1));
 
-    retv.push(format!("󱛟 {} GiB / {} GiB", get_disk().0, get_disk().1));
+    retv.push(format!("󱛟 {} GiB / {} GiB", get_disk().1, get_disk().0));
     
     retv.push(format!(" {} {} {} {} {} {} {} {} ", Colour::Black.paint(""), Colour::Red.paint(""), Colour::Green.paint(""), Colour::Yellow.paint(""), Colour::Blue.paint(""), Colour::Purple.paint(""), Colour::Cyan.paint(""), Colour::White.paint("")));
     retv
