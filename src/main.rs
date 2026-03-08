@@ -61,6 +61,8 @@ fn get_info() -> Vec<String> {
     let mut sys = System::new_all();
     sys.refresh_all();
 
+    retv.push("".to_string());
+
     retv.push(format!("󰍹 {}", System::long_os_version().unwrap()));
 
     retv.push(format!("󰌢 {}", fs::read_to_string("/sys/devices/virtual/dmi/id/product_family").expect("Could not read host").trim().to_string()));
@@ -73,7 +75,7 @@ fn get_info() -> Vec<String> {
 
     retv.push(get_ram());
 
-retv.push(get_disk());
+    retv.push(get_disk());
 
     retv
 
