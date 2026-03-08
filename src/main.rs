@@ -61,7 +61,7 @@ fn get_info() -> Vec<String> {
 
     let mut sys = System::new_all();
     sys.refresh_all();
-    // Ignore the double .to_string();
+    // Ignore the double .to_string(); Very hacked thing. LOL
     let ramgb = ByteSize::b(sys.used_memory()).as_gib().to_string()[..4].to_string();
     let ramgbtot = ByteSize::b(sys.total_memory()).as_gib().to_string()[..4].to_string();
     retv.push(format!(" {ramgb} GB / {ramgbtot} GB"));
