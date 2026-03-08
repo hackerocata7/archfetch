@@ -2,6 +2,7 @@ use sysinfo::{System, Disks};
 use bytesize::ByteSize;
 use get_shell::get_shell_name;
 use std::{fs, env};
+use ansi_term::Colour;
 
 fn compiletext(acii: Vec<String>, details: Vec<String>) {
     let mut prtv:  Vec<String> = Vec::new();
@@ -25,13 +26,13 @@ fn do_ascii() -> Vec<String> {
     retv
 }
 
-fn get_kern() -> String {
+fn get_kern() -> (String, String, String) {
     let f = fs::read_to_string("/proc/version").expect("Couldnt get kernel version");
     let i = f.split(" ").collect::<Vec<&str>>();
-    format!(" {} {} {}", i[0], i[1], i[2])
+    (i[0].to_string(), i[1].to_string(), i[2].to_string())
 }
 
-fn get_ram() -> String {
+fn get_ram() -> (String, String) {
     let mut sys = System::new_all();
     sys.refresh_all();
 
@@ -39,10 +40,10 @@ fn get_ram() -> String {
 
     let ramgb = ByteSize::b(sys.used_memory()).as_gib().to_string()[..4].to_string();
     let ramgbtot = ByteSize::b(sys.total_memory()).as_gib().to_string()[..4].to_string();
-    format!(" {ramgb} GiB / {ramgbtot} GiB")
+    (ramgb, ramgbtot)
 }
 
-fn get_disk() -> String {
+fn get_disk() -> (String, String) {
     let disks = Disks::new_with_refreshed_list();
     let mut total_sp: u64 = 0;
     let mut used_sp: u64 = 0;
@@ -53,7 +54,8 @@ fn get_disk() -> String {
 
     let totalg = ByteSize::b(total_sp).as_gib().to_string()[..5].to_string();
     let usedg = ByteSize::b(used_sp).as_gib().to_string()[..4].to_string();
-    format!("󱛟 {} GiB / {} GiB", usedg, totalg)
+    
+    (totalg, usedg)
 }
 fn get_info() -> Vec<String> {
     let mut retv = Vec::new();
@@ -61,22 +63,21 @@ fn get_info() -> Vec<String> {
     let mut sys = System::new_all();
     sys.refresh_all();
 
-    retv.push("".to_string());
-
     retv.push(format!("󰍹 {}", System::long_os_version().unwrap()));
 
     retv.push(format!("󰌢 {}", fs::read_to_string("/sys/devices/virtual/dmi/id/product_family").expect("Could not read host").trim().to_string()));
 
-    retv.push(get_kern());
+    retv.push(format!(" {} {} {}", get_kern().0, get_kern().1, get_kern().2));
 
     retv.push(format!(" {}", get_shell_name().expect("Could not parse shell name.")));
 
     retv.push(format!(" {}", env::var("XDG_CURRENT_DESKTOP").expect("Couldnt retrive WM")));
 
-    retv.push(get_ram());
+    retv.push(format!(" {} GiB / {} GiB", get_ram().0, get_ram().1));
 
-    retv.push(get_disk());
-
+    retv.push(format!("󱛟 {} GiB / {} GiB", get_disk().0, get_disk().1));
+    
+    retv.push(format!(" {} {} {} {} {} {} {} {} ", Colour::Black.paint(""), Colour::Red.paint(""), Colour::Green.paint(""), Colour::Yellow.paint(""), Colour::Blue.paint(""), Colour::Purple.paint(""), Colour::Cyan.paint(""), Colour::White.paint("")));
     retv
 
 
