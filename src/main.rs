@@ -1,4 +1,4 @@
-use sysinfo::{System, Disks};
+use sysinfo::{System, Disks, Motherboard};
 use bytesize::ByteSize;
 use get_shell::get_shell_name;
 use std::{fs, env};
@@ -61,6 +61,7 @@ fn get_info() -> Vec<String> {
     let mut retv = Vec::new();
     
     let mut sys = System::new_all();
+    let m = Motherboard::new().unwrap();
     sys.refresh_all();
 
     retv.push(format!("󰍹 {}", System::long_os_version().unwrap()));
@@ -76,6 +77,8 @@ fn get_info() -> Vec<String> {
     retv.push(format!(" {} GiB / {} GiB", get_ram().0, get_ram().1));
 
     retv.push(format!("󱛟 {} GiB / {} GiB", get_disk().1, get_disk().0));
+
+    retv.push(format!(" {} {}", m.vendor_name().unwrap(), m.name().unwrap()));
     
     retv.push(format!(" {} {} {} {} {} {} {} {} ", Colour::Black.paint(""), Colour::Red.paint(""), Colour::Green.paint(""), Colour::Yellow.paint(""), Colour::Blue.paint(""), Colour::Purple.paint(""), Colour::Cyan.paint(""), Colour::White.paint("")));
     retv
