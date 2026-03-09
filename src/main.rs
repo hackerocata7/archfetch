@@ -81,6 +81,7 @@ fn get_info() -> Vec<String> {
     retv.push(format!(" {} {}", m.vendor_name().unwrap(), m.name().unwrap()));
     
     retv.push(format!(" {} {} {} {} {} {} {} {} ", Colour::Black.paint(""), Colour::Red.paint(""), Colour::Green.paint(""), Colour::Yellow.paint(""), Colour::Blue.paint(""), Colour::Purple.paint(""), Colour::Cyan.paint(""), Colour::White.paint("")));
+    
     retv
 
 
