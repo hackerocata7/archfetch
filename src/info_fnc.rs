@@ -1,4 +1,4 @@
-use super::{get_system, get_host, get_kern, get_shell, get_wm, get_ram, get_disk, get_cpu};
+use super::{get_system, get_host, get_kern, get_shell, get_de, get_ram, get_disk, get_cpu};
 use ansi_term::Colour;
 
 // Define some variables that are used in lib.rs and here.
@@ -18,7 +18,7 @@ pub fn get_info() -> Vec<String> {
 
     retv.push(format!(" {}", get_shell()));
 
-    retv.push(format!(" {}", get_wm()));
+    retv.push(format!(" {}", get_de()));
 
     retv.push(format!(" {}", get_ram()));
 

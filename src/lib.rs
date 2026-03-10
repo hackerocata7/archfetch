@@ -79,7 +79,7 @@ fn get_shell() -> String {
     get_shell_name().expect("Could not parse shell name.")
 }
 
-fn get_wm()-> String {
+fn get_de()-> String {
     env::var("XDG_CURRENT_DESKTOP").expect("Couldnt retrive WM")
 }
 
