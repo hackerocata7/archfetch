@@ -2,7 +2,8 @@ use sysinfo::{System, Disks, Motherboard};
 use bytesize::ByteSize;
 use get_shell::get_shell_name;
 use std::{fs, env};
-use ansi_term::Colour;
+
+pub mod info_fnc;
 
 pub fn compiletext(acii: Vec<String>, details: Vec<String>) {
     let mut prtv:  Vec<String> = Vec::new();
@@ -91,29 +92,4 @@ fn get_disk() -> String {
     format!("{} GiB / {} GiB", get_disk_low().1, get_disk_low().0)
 }
 
-pub fn get_info() -> Vec<String> {
-    let mut retv = Vec::new();
-        
-    retv.push(format!("󰍹 {}", get_system()));
 
-    retv.push(format!("󰌢 {}", get_host()));
-
-    retv.push(format!(" {}", get_kern()));
-
-    retv.push(format!(" {}", get_shell()));
-
-    retv.push(format!(" {}", get_wm()));
-
-    retv.push(format!(" {}", get_ram()));
-
-    retv.push(format!("󱛟 {}", get_disk()));
-
-    retv.push(format!(" {}", get_cpu()));
-    
-    retv.push(format!(" {} {} {} {} {} {} {} {} ", Colour::Black.paint(""), Colour::Red.paint(""), Colour::Green.paint(""), Colour::Yellow.paint(""), Colour::Blue.paint(""), Colour::Purple.paint(""), Colour::Cyan.paint(""), Colour::White.paint("")));
-    
-    retv
-
-
-
-}
