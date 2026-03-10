@@ -26,13 +26,13 @@ pub fn do_ascii() -> Vec<String> {
     retv
 }
 
-fn get_kern() -> (String, String, String) {
+fn get_kern_low() -> (String, String, String) {
     let f = fs::read_to_string("/proc/version").expect("Couldnt get kernel version");
     let i = f.split(" ").collect::<Vec<&str>>();
     (i[0].to_string(), i[1].to_string(), i[2].to_string())
 }
 
-fn get_ram() -> (String, String) {
+fn get_ram_low() -> (String, String) {
     let mut sys = System::new_all();
     sys.refresh_all();
 
@@ -43,7 +43,7 @@ fn get_ram() -> (String, String) {
     (ramgb, ramgbtot)
 }
 
-fn get_disk() -> (String, String) {
+fn get_disk_low() -> (String, String) {
     let disks = Disks::new_with_refreshed_list();
     let mut total_sp: u64 = 0;
     let mut used_sp: u64 = 0;
@@ -57,28 +57,58 @@ fn get_disk() -> (String, String) {
     
     (totalg, usedg)
 }
+
+fn get_ram() -> String {
+    format!("{} GiB / {} GiB", get_ram_low().0, get_ram_low().1)
+}
+
+fn get_kern() -> String {
+    format!("{} {} {}", get_kern_low().0, get_kern_low().1, get_kern_low().2)
+}
+
+fn get_system() -> String {
+    System::long_os_version().unwrap()
+}
+
+fn get_host() -> String {
+    fs::read_to_string("/sys/devices/virtual/dmi/id/product_family").expect("Could not read host").trim().to_string()
+}
+
+fn get_shell() -> String {
+    get_shell_name().expect("Could not parse shell name.")
+}
+
+fn get_wm()-> String {
+    env::var("XDG_CURRENT_DESKTOP").expect("Couldnt retrive WM")
+}
+
+fn get_cpu() -> String {
+    let m = Motherboard::new().unwrap();
+    format!("{} {}", m.vendor_name().unwrap(), m.name().unwrap())
+}
+
+fn get_disk() -> String {
+    format!("{} GiB / {} GiB", get_disk_low().1, get_disk_low().0)
+}
+
 pub fn get_info() -> Vec<String> {
     let mut retv = Vec::new();
-    
-    let mut sys = System::new_all();
-    let m = Motherboard::new().unwrap();
-    sys.refresh_all();
+        
+    retv.push(format!("󰍹 {}", get_system()));
 
-    retv.push(format!("󰍹 {}", System::long_os_version().unwrap()));
+    retv.push(format!("󰌢 {}", get_host()));
 
-    retv.push(format!("󰌢 {}", fs::read_to_string("/sys/devices/virtual/dmi/id/product_family").expect("Could not read host").trim().to_string()));
+    retv.push(format!(" {}", get_kern()));
 
-    retv.push(format!(" {} {} {}", get_kern().0, get_kern().1, get_kern().2));
+    retv.push(format!(" {}", get_shell()));
 
-    retv.push(format!(" {}", get_shell_name().expect("Could not parse shell name.")));
+    retv.push(format!(" {}", get_wm()));
 
-    retv.push(format!(" {}", env::var("XDG_CURRENT_DESKTOP").expect("Couldnt retrive WM")));
+    retv.push(format!(" {}", get_ram()));
 
-    retv.push(format!(" {} GiB / {} GiB", get_ram().0, get_ram().1));
+    retv.push(format!("󱛟 {}", get_disk()));
 
-    retv.push(format!("󱛟 {} GiB / {} GiB", get_disk().1, get_disk().0));
-
-    retv.push(format!(" {} {}", m.vendor_name().unwrap(), m.name().unwrap()));
+    retv.push(format!(" {}", get_cpu()));
     
     retv.push(format!(" {} {} {} {} {} {} {} {} ", Colour::Black.paint(""), Colour::Red.paint(""), Colour::Green.paint(""), Colour::Yellow.paint(""), Colour::Blue.paint(""), Colour::Purple.paint(""), Colour::Cyan.paint(""), Colour::White.paint("")));
     
